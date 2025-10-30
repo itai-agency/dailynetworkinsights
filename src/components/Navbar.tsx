@@ -91,7 +91,7 @@ const Navbar = () => {
                 key={link.label}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className={`text-sm font-semibold transition-all duration-300 relative group ${
+                className={`text-sm font-semibold transition-all duration-300 relative group cursor-pointer ${
                   isScrolled 
                     ? "text-foreground/70 hover:text-foreground" 
                     : "text-white/90 hover:text-white drop-shadow-md"
@@ -99,7 +99,7 @@ const Navbar = () => {
                 style={!isScrolled ? { textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' } : {}}
               >
                 {link.label}
-                <span className={`absolute bottom-0 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300 ${
+                <span className={`absolute -bottom-1 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300 ${
                   isScrolled ? "bg-foreground" : "bg-white"
                 }`} />
               </a>
@@ -107,7 +107,7 @@ const Navbar = () => {
             <Button 
               variant="default" 
               size="sm" 
-              className="px-6 hover-lift hover:shadow-hover bg-white text-black border-0"
+              className="px-6 bg-white text-black border-0 hover:bg-white/90 hover:scale-105 hover:shadow-lg transition-all duration-300 cursor-pointer"
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick(e as any, "/#contact");
@@ -149,10 +149,10 @@ const Navbar = () => {
                 key={link.label}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className={`block text-base font-semibold transition-colors py-3 px-4 rounded-lg ${
+                className={`block text-base font-semibold transition-all duration-300 py-3 px-4 rounded-lg cursor-pointer ${
                   isScrolled 
-                    ? "text-foreground/70 hover:text-primary hover:bg-muted/50" 
-                    : "text-white/90 hover:text-white hover:bg-white/10"
+                    ? "text-foreground/70 hover:text-primary hover:bg-muted/50 hover:translate-x-1" 
+                    : "text-white/90 hover:text-white hover:bg-white/10 hover:translate-x-1"
                 }`}
                 style={!isScrolled ? { textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)' } : {}}
               >
@@ -162,7 +162,7 @@ const Navbar = () => {
             <Button 
               variant="default" 
               size="sm" 
-              className="w-full mt-4 mx-4 bg-primary text-white border-0"
+              className="w-full mt-4 mx-4 bg-primary text-white border-0 hover:bg-primary/90 hover:scale-105 hover:shadow-lg transition-all duration-300 cursor-pointer"
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick(e as any, "/#contact");
