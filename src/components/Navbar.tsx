@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -13,6 +16,39 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    
+    // Si es un enlace a una sección con ancla
+    if (href.includes("#")) {
+      const [path, hash] = href.split("#");
+      const targetPath = path || "/";
+      
+      // Si estamos en la página correcta, solo hacer scroll
+      if (location.pathname === targetPath) {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      } else {
+        // Si estamos en otra página, navegar primero y luego hacer scroll
+        navigate(targetPath);
+        // Esperar a que la navegación se complete
+        setTimeout(() => {
+          const element = document.getElementById(hash);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 100);
+      }
+    } else {
+      // Para enlaces normales sin ancla
+      navigate(href);
+    }
+    
+    setIsMobileMenuOpen(false);
+  };
 
   const navLinks = [
     { label: "Home", href: "/" },
@@ -37,6 +73,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-20 sm:h-24">
           <a 
             href="/" 
+            onClick={(e) => handleNavClick(e, "/")}
             className={`text-xl sm:text-2xl font-bold hover:scale-105 transition-all duration-300 ${
               isScrolled 
                 ? "text-foreground" 
@@ -53,6 +90,7 @@ const Navbar = () => {
               <a
                 key={link.label}
                 href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
                 className={`text-sm font-semibold transition-all duration-300 relative group ${
                   isScrolled 
                     ? "text-foreground/70 hover:text-foreground" 
@@ -70,9 +108,12 @@ const Navbar = () => {
               variant="default" 
               size="sm" 
               className="px-6 hover-lift hover:shadow-hover bg-white text-black border-0"
-              asChild
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick(e as any, "/#contact");
+              }}
             >
-              <a href="/#contact">Get In Touch</a>
+              Get In Touch
             </Button>
           </div>
 
@@ -107,7 +148,7 @@ const Navbar = () => {
               <a
                 key={link.label}
                 href={link.href}
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={(e) => handleNavClick(e, link.href)}
                 className={`block text-base font-semibold transition-colors py-3 px-4 rounded-lg ${
                   isScrolled 
                     ? "text-foreground/70 hover:text-primary hover:bg-muted/50" 
@@ -121,12 +162,13 @@ const Navbar = () => {
             <Button 
               variant="default" 
               size="sm" 
-              asChild 
               className="w-full mt-4 mx-4 bg-primary text-white border-0"
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick(e as any, "/#contact");
+              }}
             >
-              <a href="/#contact" onClick={() => setIsMobileMenuOpen(false)}>
-                Get In Touch
-              </a>
+              Get In Touch
             </Button>
           </div>
         </div>
